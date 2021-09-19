@@ -1,0 +1,45 @@
+name: ubuntu
+
+on:
+  push:
+    branches: [ 'actions' ]
+    paths:
+      - Devcontainers/Ubuntu/**
+env:
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: 'vscode/ubuntu'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.authors=${{ github.actor }}
+            org.opencontainers.image.description=Test build
+          tags: |
+            latest
+            20.04
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Devcontainers/Ubuntu
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
