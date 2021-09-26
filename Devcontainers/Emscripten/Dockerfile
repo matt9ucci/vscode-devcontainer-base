@@ -23,7 +23,7 @@ RUN set -ux \
  && git clone --depth 1 https://github.com/emscripten-core/emsdk.git $EMSDK \
  && $EMSDK/emsdk install $EMSDK_VERSION \
  && $EMSDK/emsdk activate $EMSDK_VERSION \
- && echo "source $(realpath $EMSDK/emsdk_env.sh) > /dev/null 2>&1" >> /etc/bash.bashrc
+ && echo "source $(realpath $EMSDK/emsdk_env.sh) > /dev/null 2>&1" | sudo tee -a /etc/bash.bashrc > /dev/null
 
 # OCI labels: https://github.com/opencontainers/image-spec/blob/main/annotations.md
 LABEL \
