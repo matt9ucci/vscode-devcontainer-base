@@ -4,7 +4,6 @@ RUN set -x \
  && yum update \
  && yum -y install \
 	bash-completion \
-	curl \
 	git \
 	gzip \
 	jq \
