@@ -12,6 +12,7 @@ RUN set -x \
 	curl \
 	git \
 	sudo \
+	vim \
 	wget \
  && rm -rf /var/lib/apt/lists/*
 
